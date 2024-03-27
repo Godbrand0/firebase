@@ -3,11 +3,11 @@ import{
     getFirestore, collection, onSnapshot,
     addDoc, deleteDoc, doc,
     query, where, orderBy,
-    updateDoc, serverTimestamp
+    updateDoc, serverTimestamp,getDoc
 }from 'firebase/firestore'
 
 import{
-    getauth,
+    getAuth,
     createUserWithEmailAndPassword
 } from 'firebase/auth'
 const firebaseConfig = {
@@ -21,14 +21,16 @@ const firebaseConfig = {
 
 
 //init firebase app
-const app = initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
 //init services
 const db = getFirestore()
-const auth = getauth()
+const auth = getAuth()
 
 //collection ref
 const colRef = collection(db, 'books')
+//queries
+const q = query(colRef,  orderBy('createdAt'))
 
 //get collection data
 onSnapshot(q, (snapshot) =>{
@@ -40,8 +42,7 @@ onSnapshot(q, (snapshot) =>{
 })
 
 
-//queries
-const q = query(colRef,  orderBy('createdAt'))
+
 
 
 
@@ -116,4 +117,11 @@ signupForm.addEventListener('submit', (e) =>{
     .catch((err) =>{
         console.log(err.message)
     })
+})
+//get singe dic
+const docRef = doc(db, 'books', 'ukDoIldf6YfIsJmFT9Ow')
+
+
+onSnapshot(docRef, (doc)=>{
+    console.log(doc.data(), doc.id);
 })
